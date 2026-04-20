@@ -1,2 +1,2 @@
-# Platforma do testowania
-Ten oto projekt to GUI do wizualizacji działania algorytmów znajdywania najkrótszych ścieżek. 
+# Wizualizator do Dijkstry
+Proste GUI do testowania działania zwykłego algorytmu Dijkstry.
