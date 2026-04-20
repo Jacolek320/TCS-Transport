@@ -106,7 +106,7 @@ void load_osm_pbf(const QString& path, Graph& graph) {
 
                     osmium::Location loc = it->second;
                     auto coords = proj(loc);
-                    int idx = graph.add_node(nr.ref(), loc.lon(), loc.lat(), coords.x, coords.y);
+                    int idx = graph.add_node(nr.ref(), loc.lon(), loc.lat(), coords.x, -coords.y);
                     idxs.push_back(idx);
                 }
 
