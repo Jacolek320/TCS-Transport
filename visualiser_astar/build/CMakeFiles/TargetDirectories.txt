@@ -1,5 +1,0 @@
-/shared/TCS/transport/visualiser_astar/build/CMakeFiles/PathVisualizer.dir
-/shared/TCS/transport/visualiser_astar/build/CMakeFiles/edit_cache.dir
-/shared/TCS/transport/visualiser_astar/build/CMakeFiles/rebuild_cache.dir
-/shared/TCS/transport/visualiser_astar/build/CMakeFiles/PathVisualizer_autogen_timestamp_deps.dir
-/shared/TCS/transport/visualiser_astar/build/CMakeFiles/PathVisualizer_autogen.dir

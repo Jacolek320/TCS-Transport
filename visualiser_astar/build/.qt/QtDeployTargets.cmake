@@ -1,2 +1,0 @@
-set(__QT_DEPLOY_TARGET_PathVisualizer_FILE /shared/TCS/transport/visualiser_astar/build/PathVisualizer)
-set(__QT_DEPLOY_TARGET_PathVisualizer_TYPE EXECUTABLE)
