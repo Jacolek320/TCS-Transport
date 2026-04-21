@@ -20,6 +20,9 @@ struct ViewTransform {
     double minx=1e300, miny=1e300, maxx=-1e300, maxy=-1e300;
     double margin = 20.0, scale = 1.0, tx=0.0, ty=0.0;
 
+    const double WIDTH = 900.0;
+    const double HEIGHT = 1600.0;
+
     void compute(const Graph& g) {
         for (auto &n : g.nodes) {
             minx = std::min(minx, n.x); miny = std::min(miny, n.y);
@@ -27,7 +30,7 @@ struct ViewTransform {
         }
         double w = std::max(1.0, maxx - minx);
         double h = std::max(1.0, maxy - miny);
-        scale = std::min((1000.0 - 2 * margin) / w, (800.0 - 2 * margin) / h);
+        scale = std::min((HEIGHT - 2 * margin) / w, (WIDTH - 2 * margin) / h);
         tx = -minx * scale + margin;
         ty = -miny * scale + margin;
     }
