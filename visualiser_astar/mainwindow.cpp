@@ -25,7 +25,7 @@ MainWindow::MainWindow() {
     auto* resetBtn = new QPushButton("RESET");
     speedSlider = new QSlider(Qt::Horizontal);
     speedSlider->setRange(1, 100);
-    speedSlider->setValue(50);
+    speedSlider->setValue(100);
 
     controls->addWidget(loadBtn);
     controls->addWidget(startBtn);
@@ -39,7 +39,7 @@ MainWindow::MainWindow() {
     view = new GraphView();
     view->setScene(scene);
     view->setRenderHint(QPainter::Antialiasing);
-    view->setMinimumSize(1000, 800);
+    view->setMinimumSize(1600, 900);
     view->setViewportUpdateMode(QGraphicsView::SmartViewportUpdate); // Redraw only things that actually change
     mainL->addWidget(view);
 
@@ -61,19 +61,18 @@ void MainWindow::onLoad() {
     graph.clear();
     graph.reserve(100000, 200000);
     scene->clear();
-    nodesItems.clear();
 
     load_osm_pbf(f, graph);
     vt.compute(graph);
 
-    for (size_t i = 0; i < graph.nodes.size(); ++i) {
-        QPointF p = vt.toScene(graph.nodes[i].x, graph.nodes[i].y);
-        // Using 1x1 rects or ellipses is much faster than complex shapes
-        auto* el = scene->addEllipse(p.x()-0.5, p.y()-0.5, 1, 1, Qt::NoPen, QBrush(Qt::gray));
-        el->setAcceptedMouseButtons(Qt::NoButton);
-        el->setAcceptHoverEvents(false);
-        el->setZValue(1);
-        nodesItems.push_back(el);
+    nodesItems.assign(graph.nodes.size(), nullptr);
+
+    for (size_t i = 0; i < graph.edges.size(); i += 2) { // iterate only one direction to avoid duplicate lines
+        auto &e = graph.edges[i];
+        QPointF p1 = vt.toScene(graph.nodes[e.u_idx].x, graph.nodes[e.u_idx].y);
+        QPointF p2 = vt.toScene(graph.nodes[e.v_idx].x, graph.nodes[e.v_idx].y);
+        auto* line = scene->addLine(QLineF(p1, p2), QPen(QColor(200,200,200), 0.5));
+        line->setZValue(0); // background
     }
     onReset();
 }
@@ -134,19 +133,34 @@ void MainWindow::onStep() {
     }
 }
 
-// Helper to reset a node's visual appearance
+QGraphicsEllipseItem* MainWindow::ensureNodeItem(int idx) {
+    if (idx < 0 || idx >= (int)nodesItems.size()) return nullptr;
+    if (nodesItems[idx]) return nodesItems[idx];
+
+    double size = 2.0;
+    QPointF p = vt.toScene(graph.nodes[idx].x, graph.nodes[idx].y);
+    auto* el = scene->addEllipse(p.x()-size/2, p.y()-size/2, size, size, Qt::NoPen, QBrush(Qt::gray));
+    el->setAcceptedMouseButtons(Qt::NoButton);
+    el->setAcceptHoverEvents(false);
+    el->setZValue(1);
+    nodesItems[idx] = el;
+    return el;
+}
+
 void MainWindow::updateNodeVisual(int idx, QColor color, bool isBig) {
-    if (idx < 0 || idx >= nodesItems.size()) return;
-    
-    nodesItems[idx]->setBrush(QBrush(color));
+    if (idx < 0 || idx >= (int)nodesItems.size()) return;
+
+    QGraphicsEllipseItem* item = ensureNodeItem(idx);
+    if (!item) return;
+
+    item->setBrush(QBrush(color));
     double size = isBig ? 8.0 : 2.0;
     double offset = size / 2.0;
     QPointF p = vt.toScene(graph.nodes[idx].x, graph.nodes[idx].y);
-    nodesItems[idx]->setRect(p.x() - offset, p.y() - offset, size, size);
-    
-    // Bring endpoints to the very front
-    if (isBig) nodesItems[idx]->setZValue(3);
-    else nodesItems[idx]->setZValue(1);
+    item->setRect(p.x() - offset, p.y() - offset, size, size);
+
+    if (isBig) item->setZValue(3);
+    else item->setZValue(1);
 }
 
 void MainWindow::onSpeedChanged(int /*v*/) {
@@ -177,9 +191,9 @@ void MainWindow::onReset() {
         }
     }
 
-    // 2. Reset all nodes to original state
     for (size_t i = 0; i < nodesItems.size(); ++i) {
-        updateNodeVisual(i, Qt::gray, false);
+        if (nodesItems[i])
+            updateNodeVisual(i, Qt::gray, false);
     }
 
     // 3. Clear data

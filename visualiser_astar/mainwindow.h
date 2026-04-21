@@ -39,11 +39,11 @@ private slots:
 private:
     void initAStar();
     void colorNodeByDistance(int idx);
-    // void colorEdgeByDistance(int eidx, double distance);
     void reconstructPath();
     void updateNodeVisual(int idx, QColor color, bool isBig);
     int timerInterval() const;
     int batchSize() const;
+    QGraphicsEllipseItem* ensureNodeItem(int idx);
 
     Graph graph;
     ViewTransform vt;
