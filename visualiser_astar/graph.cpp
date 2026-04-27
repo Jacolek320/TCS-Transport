@@ -52,7 +52,7 @@ void load_osm_pbf(const QString& path, Graph& graph) {
         return; 
     }
 
-    const double percentage = 1.0;
+    const double percentage = 0.5;
     // 0.0 -> load no points
     // 1.0 -> load whole map
     // anything in between -> load only according rectangle containing center

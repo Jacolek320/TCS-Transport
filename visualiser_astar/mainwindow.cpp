@@ -192,8 +192,8 @@ void MainWindow::onReset() {
     }
 
     for (size_t i = 0; i < nodesItems.size(); ++i) {
-        if (nodesItems[i])
-            updateNodeVisual(i, Qt::gray, false);
+        // if (nodesItems[i])
+        updateNodeVisual(i, Qt::gray, false);
     }
 
     // 3. Clear data
@@ -255,14 +255,18 @@ void MainWindow::initAStar() {
 }
 
 void MainWindow::colorNodeByDistance(int idx) {
+    QGraphicsEllipseItem* item = ensureNodeItem(idx);
+    if (!item) return;
+
     double t = std::min(1.0, dist[idx] / 5000.0);
     QColor c((1.0-t)*255, 0, t*255);
-    if (idx == start_idx) c = Qt::red;
-    if (idx == end_idx) c = Qt::blue;
-    nodesItems[idx]->setBrush(QBrush(c));
+    if (start_idx.has_value() && idx == *start_idx) c = Qt::red;
+    if (end_idx.has_value() && idx == *end_idx) c = Qt::blue;
+    item->setBrush(QBrush(c));
 }
 
 void MainWindow::reconstructPath() {
+    if (!end_idx.has_value()) return;
     int cur = *end_idx;
     while (cur != -1 && parent[cur] != -1) {
         int p = parent[cur];
@@ -273,7 +277,8 @@ void MainWindow::reconstructPath() {
                 break;
             }
         }
-        nodesItems[cur]->setBrush(QBrush(Qt::yellow));
+        QGraphicsEllipseItem* item = ensureNodeItem(cur);
+        if (item) item->setBrush(QBrush(Qt::yellow));
         cur = p;
     }
 }
