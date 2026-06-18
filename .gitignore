@@ -1,0 +1,5 @@
+# data files
+data/*.osm.pbf
+
+# builds
+*/build/
