@@ -11,8 +11,10 @@ Aby uruchomić:
 
 ## LogBook
 Za wszystkie zmiany odpowiada naturalna głupota (nie sztuczna inteligencja).
-### Podejście 1
+
+### Entry 1
 Zawartość skopiowana z visualizera dijkstry + próba przerobienia. Cel: arc-flags.
 
+### Entry 2
 Udało się wydzielić dijkstrę od visualisera. Rysowanie dalej jest zbyt wolne.
 
