@@ -29,9 +29,9 @@ int Graph::add_node(const NodeId &id, double lon, double lat, double x, double y
 
 void Graph::add_edge(int u, int v, double w) {
     int e0 = (int)edges.size();
-    edges.push_back({u, v, w, nullptr});
+    edges.push_back({u, v, w});
     adj[u].push_back(e0);
-    edges.push_back({v, u, w, nullptr});
+    edges.push_back({v, u, w});
     adj[v].push_back(e0 + 1);
 }
 

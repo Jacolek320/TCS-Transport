@@ -22,8 +22,8 @@ MainWindow::MainWindow() {
     auto* pauseBtn = new QPushButton("PAUSE");
     auto* resetBtn = new QPushButton("RESET");
     speedSlider = new QSlider(Qt::Horizontal);
-    speedSlider->setRange(1, 15);
-    speedSlider->setValue(1);
+    speedSlider->setRange(3, 18);
+    speedSlider->setValue(12);
 
     controls->addWidget(loadBtn);
     controls->addWidget(startBtn);
@@ -61,6 +61,9 @@ void MainWindow::onLoad() {
     arcflags.graph.clear();
     arcflags.graph.reserve(100000, 200000);
     scene->clear();
+    for(auto *it : nodesItems) {
+        delete it;
+    }
     nodesItems.clear();
 
     load_osm_pbf(f, arcflags.graph);
@@ -99,18 +102,10 @@ void MainWindow::onStep() {
         auto &e = arcflags.graph.edges[eidx];
         int u = e.u_idx;
         colorNodeByDistance(u);
-        int v = e.v_idx;
-        if (!e.lineItem) {
-            QPointF p1 = vt.toScene(arcflags.graph.nodes[u].x, arcflags.graph.nodes[u].y);
-            QPointF p2 = vt.toScene(arcflags.graph.nodes[v].x, arcflags.graph.nodes[v].y);
-            e.lineItem = scene->addLine(QLineF(p1, p2), QPen(Qt::white, 0.5));
-            e.lineItem->setZValue(0);
-        }
     }
 
     if(arcflags.isFinished()) {
         reconstructPath();
-        std::cout << "Finished algorithm" << std::endl;
         onPause();
         return;
     }
@@ -127,8 +122,8 @@ void MainWindow::updateNodeVisual(int idx, QColor color, bool isBig) {
     nodesItems[idx]->setRect(p.x() - offset, p.y() - offset, size, size);
     
     // Bring endpoints to the very front
-    if (isBig) nodesItems[idx]->setZValue(3);
-    else nodesItems[idx]->setZValue(1);
+    if (isBig) nodesItems[idx]->setZValue(4);
+    else nodesItems[idx]->setZValue(2);
 }
 
 void MainWindow::onSpeedChanged(int /*v*/) {
@@ -152,33 +147,25 @@ void MainWindow::onPause() {
 }
 
 void MainWindow::onReset() {
-    std::cout << "Started reset (might also take some time)" << std::endl;
+    std::cout << "Resetting map (might also take some time)" << std::endl;
     onPause(); // Stop timer
     
     // 1. Remove all algorithm edges from scene
-    int number = 0;
-    for (auto &e : arcflags.graph.edges) {
-        if (e.lineItem) {
-            scene->removeItem(e.lineItem);
-            delete e.lineItem; // Free memory
-            e.lineItem = nullptr;
-            if((number%1000) == 999)
-                std::cout << number << std::endl;
-            number++;
-        }
+    for(auto *line : edgesItems) {
+        delete line;      //Free memory
     }
+    edgesItems.clear();
+
     // 2. Reset all nodes to original state
     for (size_t i = 0; i < nodesItems.size(); ++i) {
-        if((i%1000) == 999)
-            std::cout << "next " << i << std::endl;
         updateNodeVisual(i, Qt::gray, false);
     }
+
     // 3. Clear data
     arcflags.reset();
     start_idx.reset();
     end_idx.reset();
     initialized = false;
-    std::cout << "Finished reset" << std::endl;
 }
 
 int MainWindow::timerInterval() const {
@@ -231,8 +218,14 @@ void MainWindow::reconstructPath() {
     std::vector<int> pathFound = arcflags.reconstruct();
 
     for(int eidx : pathFound) {
-        arcflags.graph.edges[eidx].lineItem->setPen(QPen(Qt::yellow, 2.0));
-        arcflags.graph.edges[eidx].lineItem->setZValue(3); // Bring to front
+        auto &e = arcflags.graph.edges[eidx];
+        int u = e.u_idx;
+        int v = e.v_idx;
+        QPointF p1 = vt.toScene(arcflags.graph.nodes[u].x, arcflags.graph.nodes[u].y);
+        QPointF p2 = vt.toScene(arcflags.graph.nodes[v].x, arcflags.graph.nodes[v].y);
+        auto *line = scene->addLine(QLineF(p1, p2), QPen(Qt::yellow, 4.0));
+        line->setZValue(3);       //Bring to front
+        edgesItems.push_back(line);
         nodesItems[arcflags.graph.edges[eidx].v_idx]->setBrush(QBrush(Qt::yellow));
     }
 }

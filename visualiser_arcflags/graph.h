@@ -17,13 +17,12 @@ struct Node {
 struct Edge {
     int u_idx, v_idx;
     double weight;
-    QGraphicsLineItem* lineItem = nullptr;
 };
 
 struct Graph {
     std::vector<Node> nodes;
     std::unordered_map<NodeId, int> id_to_idx;  //nodeId to its index in nodes
-    std::vector<std::vector<int>> adj; 
+    std::vector<std::vector<int>> adj;
     std::vector<Edge> edges;
 
     void reserve(size_t n_nodes, size_t n_edges);

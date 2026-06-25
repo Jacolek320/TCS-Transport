@@ -56,6 +56,7 @@ private:
     QSlider* speedSlider;
     QTimer* timer;
     std::vector<QGraphicsEllipseItem*> nodesItems;
+    std::vector<QGraphicsLineItem*> edgesItems;         //only for final path
 
     std::optional<int> start_idx, end_idx;
     // std::vector<double> dist;

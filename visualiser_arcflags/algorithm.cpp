@@ -36,7 +36,6 @@ std::vector<int> ArcFlags::doSteps(int count) {
         return result;
     for (int i = 0; i < count; ++i) {
         if (pq.empty()) {
-            // onPause();
             return result;
         }
 
@@ -49,13 +48,9 @@ std::vector<int> ArcFlags::doSteps(int count) {
         }
 
         finalized[u] = true;
-        // colorNodeByDistance(u);
 
         // Check if we reached the target
         if(isFinished()) {
-        // if (end_idx && u == *end_idx) {
-            // reconstructPath();
-            // onPause();
             return result;
         }
 
@@ -71,13 +66,6 @@ std::vector<int> ArcFlags::doSteps(int count) {
 
                 // Visual feedback: Return the edge
                 result.push_back(eidx);
-
-                // if (!e.lineItem) {
-                //     QPointF p1 = vt.toScene(graph.nodes[u].x, graph.nodes[u].y);
-                //     QPointF p2 = vt.toScene(graph.nodes[v].x, graph.nodes[v].y);
-                //     e.lineItem = scene->addLine(QLineF(p1, p2), QPen(Qt::white, 0.5));
-                //     e.lineItem->setZValue(0);
-                // }
             }
         }
     }
@@ -89,14 +77,11 @@ std::vector<int> ArcFlags::reconstruct() {
     while(cur != -1 && parent[cur] != -1) {
         int p = parent[cur];
         for (int eidx : graph.adj[p]) {
-            if (graph.edges[eidx].v_idx == cur && graph.edges[eidx].lineItem) {
+            if (graph.edges[eidx].v_idx == cur) {
                 result.push_back(eidx);
-                // graph.edges[eidx].lineItem->setPen(QPen(Qt::yellow, 2.0));
-                // graph.edges[eidx].lineItem->setZValue(3); // Bring to front
                 break;
             }
         }
-        // nodesItems[cur]->setBrush(QBrush(Qt::yellow));
         cur = p;
     }
     return result;
