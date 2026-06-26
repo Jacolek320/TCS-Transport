@@ -143,6 +143,5 @@ std::vector<int> BiDijkstra::reconstruct() {
         cur_b = p;
     }
 
-
     return result;
 }
