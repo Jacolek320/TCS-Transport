@@ -40,3 +40,6 @@ Po kolejnej przerwie wyniki dla `graph.cpp::percent = 0.3`, `algorithm.cpp::side
 Podsumowując, zabawę oceniam na +30°C w cieniu na 10. Wygląda fajnie, działa też. Preprocessing może i trwa długo, ale jak się człowiekowi nie spieszy, to do przeżycia. Możnaby to serializować, ale chyba nie pokuszę się, żeby wrzucać ogromne pliki do repozytorium.
 
 Obecnie całość ustawiona jest na `graph.cpp::percent = 0.2`, `algorithm.cpp::side = 5` (regiony są całkiem nieźle zbalansowanie). Preprocessing trwa (u mnie) niecałe 3 minuty, co powinno być zjadliwą dla czytelnika wartością. Może i cudów nie ma, ale zdecydowanie da się zobaczyć poprawę względem zwykłego dijkstry (który wykonywany jest pod podszewką). W terminalu można obserwować logi :).
+
+### Entry 8
+Dla podkręconej wartości `graph.cpp::percent = 0.2`, `algorithm.cpp::side = 20` większość wyszukań jest prawie natychmiastowa. Ale trzeba sobie paręnaście minut na to poczekać.
