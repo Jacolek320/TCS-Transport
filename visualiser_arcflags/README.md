@@ -21,3 +21,7 @@ Udało się wydzielić dijkstrę od visualisera. Rysowanie dalej jest zbyt wolne
 ### Entry 3
 Udało się przyspieszyć visualiser, ale wciąż jest wolny.
 
+### Entry 4
+Część preprocessingu odpowiadająca za podział na regiony zrobiona. Najleniwiej jak tylko możliwe, czyli kratą. Podział jest jaki jest, przy 726423 wierzchołkach (tak, mapa Krakowa) i kracie 3x3 rozmiary regionów są pomiędzy 40k na obrzeżach a 189k w centrum. Przy większej liczbie komórek będzie pewnie jeszcze większy rozjazd (PS: jest), ale może coś z tego wyjdzie.
+
+

@@ -68,6 +68,7 @@ void MainWindow::onLoad() {
 
     load_osm_pbf(f, arcflags.graph);
     vt.compute(arcflags.graph);
+    arcflags.preprocess();
 
     for (size_t i = 0; i < arcflags.graph.nodes.size(); ++i) {
         QPointF p = vt.toScene(arcflags.graph.nodes[i].x, arcflags.graph.nodes[i].y);

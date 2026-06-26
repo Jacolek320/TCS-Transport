@@ -12,6 +12,8 @@ class ArcFlags {
     std::vector<bool> finalized;
     std::priority_queue<std::pair<double,int>, std::vector<std::pair<double,int>>, std::greater<>> pq;
 
+    std::vector<int> regions;           //what is the region of a given node, by idx
+    std::vector<long long> flags;           //flags of a given edge, by eidx
 public:
     Graph graph;
     ArcFlags();
@@ -19,6 +21,8 @@ public:
     void reset();
     double getDist(int idx);
     bool isFinished();
+    
+    void preprocess();
     std::vector<int> doSteps(int count);
     std::vector<int> reconstruct();
 };
