@@ -210,7 +210,7 @@ void MainWindow::initAlg() {
 }
 
 void MainWindow::colorNodeByDistance(int idx) {
-    double t = std::min(1.0, arcflags.getDist(idx) / 10000.0);
+    double t = std::min(1.0, arcflags.getDist(idx) / 5000.0);
     QColor c((1.0-t)*255, 0, t*255);
     nodesItems[idx]->setBrush(QBrush(c));
 }
