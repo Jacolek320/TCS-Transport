@@ -20,8 +20,8 @@ void ArcFlags::set(int start, int end) {
     
     dist_forward[start_idx] = 0.0;
     dist_backward[end_idx] = 0.0;
-    pq_forward.push({0.0, start_idx});
-    pq_backward.push({0.0, end_idx});
+    pq_forward.emplace(0.0, start_idx);
+    pq_backward.emplace(0.0, end_idx);
     optimal = std::numeric_limits<double>::infinity();
     optimal_edge = {-1, -1};
 }
@@ -95,7 +95,7 @@ void addFlags(int root_idx, int root_flag, Graph &graph, std::vector<std::vector
     std::vector<bool> finalized(node_count, false);
     std::priority_queue<std::pair<double,int>, std::vector<std::pair<double,int>>, std::greater<>> pq;
     dist[root_idx] = 0.0;
-    pq.push({0.0, root_idx});
+    pq.emplace(0.0, root_idx);
 
     while(!pq.empty()) {
         auto [dist_u, u] = pq.top();
@@ -112,7 +112,7 @@ void addFlags(int root_idx, int root_flag, Graph &graph, std::vector<std::vector
             if(new_distance < dist[v]) {
                 dist[v] = new_distance;
                 parent[v] = u;
-                pq.push({dist[v], v});
+                pq.emplace(dist[v], v);
             }
         }
     }
@@ -165,7 +165,7 @@ std::vector<int> ArcFlags::doSteps(int count) {
     if(isFinished())
         return result;
     for (int i = 0; i < count; ++i) {
-        if (pq_forward.empty() && pq_backward.empty()) {
+        if (pq_forward.empty() || pq_backward.empty()) {
             return result;
         }
 
@@ -195,7 +195,7 @@ std::vector<int> ArcFlags::doSteps(int count) {
                 if(distance < dist_forward[next]) {
                     dist_forward[next] = distance;
                     parent_forward[next] = f;
-                    pq_forward.push({dist_forward[next], next});
+                    pq_forward.emplace(dist_forward[next], next);
 
                     double newOpt = distance + dist_backward[next];
                     if(newOpt < optimal) {
@@ -227,7 +227,7 @@ std::vector<int> ArcFlags::doSteps(int count) {
                 if(distance < dist_backward[next]) {
                     dist_backward[next] = distance;
                     parent_backward[next] = b;
-                    pq_backward.push({dist_backward[next], next});
+                    pq_backward.emplace(dist_backward[next], next);
 
                     double newOpt = distance + dist_forward[next];
                     if(newOpt < optimal) {

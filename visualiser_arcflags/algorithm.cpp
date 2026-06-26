@@ -16,7 +16,7 @@ void ArcFlags::set(int start, int end) {
     while(!pq.empty()) pq.pop();            //clear pq
     
     dist[start_idx] = 0.0;
-    pq.push({0.0, start_idx});
+    pq.emplace(0.0, start_idx);
 }
 void ArcFlags::reset() {
     start_idx = -1;
@@ -87,7 +87,7 @@ void addFlags(int root_idx, int root_flag, Graph &graph, std::vector<std::vector
     std::vector<bool> finalized(node_count, false);
     std::priority_queue<std::pair<double,int>, std::vector<std::pair<double,int>>, std::greater<>> pq;
     dist[root_idx] = 0.0;
-    pq.push({0.0, root_idx});
+    pq.emplace(0.0, root_idx);;
 
     while(!pq.empty()) {
         auto [dist_u, u] = pq.top();
@@ -104,7 +104,7 @@ void addFlags(int root_idx, int root_flag, Graph &graph, std::vector<std::vector
             if(new_distance < dist[v]) {
                 dist[v] = new_distance;
                 parent[v] = u;
-                pq.push({dist[v], v});
+                pq.emplace(dist[v], v);
             }
         }
     }
@@ -188,7 +188,7 @@ std::vector<int> ArcFlags::doSteps(int count) {
             if (nd < dist[v]) {
                 dist[v] = nd;
                 parent[v] = u;
-                pq.push({dist[v], v});
+                pq.emplace(dist[v], v);
 
                 // Visual feedback: Return the edge
                 result.push_back(eidx);
