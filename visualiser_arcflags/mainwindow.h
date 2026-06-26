@@ -49,7 +49,6 @@ private:
 
     ArcFlags arcflags;
 
-    // Graph graph;
     ViewTransform vt;
     QGraphicsScene* scene;
     GraphView* view;
@@ -59,10 +58,6 @@ private:
     std::vector<QGraphicsLineItem*> edgesItems;         //only for final path
 
     std::optional<int> start_idx, end_idx;
-    // std::vector<double> dist;
-    // std::vector<int> parent;
-    // std::vector<char> finalized;
-    // std::priority_queue<std::pair<double,int>, std::vector<std::pair<double,int>>, std::greater<>> pq;
     bool running = false;
     bool initialized = false;
 };

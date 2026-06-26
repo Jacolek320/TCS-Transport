@@ -49,7 +49,6 @@ private:
 
     BiDijkstra bidijkstra;
 
-    // Graph graph;
     ViewTransform vt;
     QGraphicsScene* scene;
     GraphView* view;
