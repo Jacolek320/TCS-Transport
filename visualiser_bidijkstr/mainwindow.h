@@ -1,0 +1,66 @@
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
+
+#include <QWidget>
+#include <QGraphicsView>
+#include <QGraphicsScene>
+#include <QPushButton>
+#include <QSlider>
+#include <QTimer>
+#include <optional>
+#include <queue>
+#include <iostream>
+#include "graph.h"
+#include "utils.h"
+#include "algorithm.h"
+
+class GraphView : public QGraphicsView {
+    Q_OBJECT
+public:
+    explicit GraphView(QWidget* parent = nullptr) : QGraphicsView(parent) {}
+protected:
+    void mousePressEvent(QMouseEvent* ev) override;
+signals:
+    void sceneClicked(const QPointF& pt);
+};
+
+class MainWindow : public QWidget {
+    Q_OBJECT
+public:
+    MainWindow();
+
+private slots:
+    void onLoad();
+    void onStart();
+    void onPause();
+    void onReset();
+    void onStep();
+    void onSceneClicked(const QPointF& pt);
+    void onSpeedChanged(int value);
+
+private:
+    void initAlg();
+    void colorNodeByDistance(int idx);
+    void colorEdgeByDistance(int eidx, double distance);
+    void reconstructPath();
+    void updateNodeVisual(int idx, QColor color, bool isBig);
+    int timerInterval() const;
+    int batchSize() const;
+
+    BiDijkstra bidijkstra;
+
+    // Graph graph;
+    ViewTransform vt;
+    QGraphicsScene* scene;
+    GraphView* view;
+    QSlider* speedSlider;
+    QTimer* timer;
+    std::vector<QGraphicsEllipseItem*> nodesItems;
+    std::vector<QGraphicsLineItem*> edgesItems;         //only for final path
+
+    std::optional<int> start_idx, end_idx;
+    bool running = false;
+    bool initialized = false;
+};
+
+#endif
