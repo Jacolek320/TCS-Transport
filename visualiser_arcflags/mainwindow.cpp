@@ -23,7 +23,7 @@ MainWindow::MainWindow() {
     auto* resetBtn = new QPushButton("RESET");
     speedSlider = new QSlider(Qt::Horizontal);
     speedSlider->setRange(3, 18);
-    speedSlider->setValue(12);
+    speedSlider->setValue(6);
 
     controls->addWidget(loadBtn);
     controls->addWidget(startBtn);

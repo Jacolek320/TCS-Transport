@@ -7,6 +7,8 @@
 #include <osmium/io/header.hpp>
 #include <iostream>
 
+const double percent = 0.2;         //what part of central window will be used, at most 1.0
+
 void Graph::reserve(size_t n_nodes, size_t n_edges) {
     nodes.reserve(n_nodes);
     edges.reserve(n_edges * 2);
@@ -56,7 +58,6 @@ void load_osm_pbf(const QString& path, Graph& graph) {
     }
 
     // 2. Calculate the central window
-    double percent = 1.0;
     double center_lon = (total_bbox.bottom_left().lon() + total_bbox.top_right().lon()) / 2.0;
     double center_lat = (total_bbox.bottom_left().lat() + total_bbox.top_right().lat()) / 2.0;
     
