@@ -1,9 +1,10 @@
+# ALT
 Aby zkompilować:
-1) mkdir build && cd build
-2) cmake .. && cmake --build .
+1) `mkdir build && cd build`
+2) `cmake .. && cmake --build .`
 
 Aby uruchomić:
-1) ./ALT
+1) `./ALT`
 2) Kliknij LOAD i wybieramy plik .osm.pbf
 3) Wybierz punkt startowy, końcowy, klikając w odpowiednią opcję a następnie klikając miejsce na mapie.
 4) Wybierz metodę wyznaczania landmarków. Przy wyborze ręcznym należy klikać w odpowiednie miejsca na mapie, co zaznaczy odpowiednie wierzchołki jako landmarki. Jest również przycisk czyszczący aktualny ich wybór. 
